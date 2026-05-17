@@ -1,0 +1,48 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:SpaceHaven_Save_Editor.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="350"
+        Width="700" Height="350"
+        x:Class="SpaceHaven_Save_Editor.Views.FactionsWindow"
+        WindowStartupLocation="CenterOwner"
+        Icon="/Assets/icon.ico"
+        CanResize="False"
+        Title="Factions Editor">
+
+    <Design.DataContext>
+        <viewModels:FactionsViewModel />
+    </Design.DataContext>
+
+    <Grid Margin="5" RowDefinitions="50, *">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10">
+            <ComboBox Width="200" PlaceholderText="Select Faction" VerticalAlignment="Center"
+                      ItemsSource="{Binding Factions}"
+                      SelectedItem="{Binding SelectedFaction}" />
+            <TextBlock FontSize="14" VerticalAlignment="Center" TextWrapping="Wrap"
+                       Text="You can only adjust relationship and access safely." />
+            <Button Content="Save and Exit" HorizontalAlignment="Right" Padding="10"
+                    Command="{Binding SaveAndExit}" />
+        </StackPanel>
+        <DataGrid Grid.Row="1" AutoGenerateColumns="False" HorizontalAlignment="Center"
+                  VerticalScrollBarVisibility="Visible"
+                  ItemsSource="{Binding SelectedFaction.Relationships}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" IsReadOnly="True"
+                                    Binding="{Binding FactionName}" />
+                <DataGridTextColumn Header="Stance" IsReadOnly="True"
+                                    Binding="{Binding FactionStance, Mode=TwoWay}" />
+                <DataGridTextColumn Header="Relationship"
+                                    Binding="{Binding RelationshipAmount, Mode=TwoWay}" />
+
+                <DataGridCheckBoxColumn Header="Trade Access"
+                                        Binding="{Binding TradeAccess}" />
+                <DataGridCheckBoxColumn Header="Ship Access"
+                                        Binding="{Binding ShipAccess}" />
+                <DataGridCheckBoxColumn Header="Vision Access"
+                                        Binding="{Binding VisionAccess}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

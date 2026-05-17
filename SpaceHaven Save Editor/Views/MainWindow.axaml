@@ -1,0 +1,62 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SpaceHaven_Save_Editor.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="950" d:DesignHeight="420"
+        Width="950" Height="420"
+        x:Class="SpaceHaven_Save_Editor.Views.MainWindow"
+        WindowStartupLocation="CenterScreen"
+        Icon="/Assets/icon.ico"
+        Title="{Binding FileNameTitle}"
+        Background="#1E1E1E">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Background="#252526" BorderBrush="#333333" BorderThickness="0,0,0,1">
+            <Menu Padding="4">
+                <MenuItem Header="File">
+                    <MenuItem Command="{Binding OpenFile}"
+                              Header="Open File" InputGesture="Ctrl+O" HotKey="Ctrl+O" />
+
+                    <MenuItem Command="{Binding SaveFile}"
+                              Header="Save File" InputGesture="Ctrl+S" HotKey="Ctrl+S" />
+
+                    <MenuItem Command="{Binding CreateBackUp}"
+                              Header="Manual Backup" InputGesture="Ctrl+B" HotKey="Ctrl+B" />
+
+                    <CheckBox Content="Auto Backup" IsChecked="{Binding AutoBackup}" />
+
+                </MenuItem>
+                <MenuItem Header="Log">
+                    <MenuItem Header="See Log"
+                              Command="{Binding OpenLogWindow}" />
+                </MenuItem>
+                <MenuItem Header="References">
+                    <MenuItem Command="{Binding OpenIdCollections}"
+                              Header="IDs" InputGesture="Ctrl+I" HotKey="Ctrl+I" />
+                    <MenuItem Command="{Binding OpenNodeCollections}"
+                              Header="Nodes" InputGesture="Ctrl+N" HotKey="Ctrl+N" />
+                </MenuItem>
+                <MenuItem Header="About">
+                    <MenuItem Command="{Binding GotoGithub}"
+                              Header="Github" />
+                </MenuItem>
+
+                <TextBlock Text="{Binding TextData}" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="#A0A0A0"/>
+            </Menu>
+        </Border>
+
+        <ProgressBar IsIndeterminate="True" DockPanel.Dock="Top"
+                     IsVisible="{Binding IsBusy}" Height="2" Margin="0" />
+
+        <Grid DockPanel.Dock="Bottom" Margin="0">
+            <UserControl>
+                <ContentControl Content="{Binding GameViewModel}" />
+            </UserControl>
+        </Grid>
+    </DockPanel>
+</Window>

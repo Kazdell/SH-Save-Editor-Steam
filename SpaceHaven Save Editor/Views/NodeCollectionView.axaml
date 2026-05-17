@@ -1,0 +1,22 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:SpaceHaven_Save_Editor.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        Width="600" Height="450"
+        x:Class="SpaceHaven_Save_Editor.Views.NodeCollectionView"
+        WindowStartupLocation="CenterScreen"
+        Icon="/Assets/icon.ico"
+        Title="XML Nodes">
+
+    <Design.DataContext>
+        <vm:NodeCollectionViewModel />
+    </Design.DataContext>
+
+    <Grid>
+        <ScrollViewer Padding="20">
+            <ListBox ItemsSource="{Binding NodeCollection}" />
+        </ScrollViewer>
+    </Grid>
+</Window>

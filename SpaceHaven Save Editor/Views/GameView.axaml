@@ -1,0 +1,126 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:SpaceHaven_Save_Editor.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="420"
+             x:Class="SpaceHaven_Save_Editor.Views.GameView">
+
+    <Design.DataContext>
+        <vm:GameViewModel />
+    </Design.DataContext>
+
+    <Grid ColumnDefinitions="220, *, *" RowDefinitions="Auto, *" Margin="10">
+
+        <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" 
+                Background="#252526" CornerRadius="8" Padding="15" Margin="5" 
+                BorderBrush="#333333" BorderThickness="1"
+                VerticalAlignment="Top">
+            <StackPanel Spacing="10">
+                <TextBlock Text="Game Settings" FontWeight="Bold" FontSize="16" Foreground="#E0E0E0" Margin="0,0,0,10"/>
+                
+                <Label Content="Player Bank" />
+                <TextBox HorizontalAlignment="Stretch" Text="{Binding Game.Player.Money}" />
+                
+                <CheckBox Content="SandBox Mode" IsChecked="{Binding Game.GameSettings.SandBoxMode, Mode=TwoWay}" />
+                
+                <Separator Height="20" Background="#333333" Margin="0,10,0,10" />
+                
+                <Button Content="Edit Research" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"
+                        Command="{Binding OpenResearchCommand}" />
+                <Button Content="Edit Factions" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"
+                        Command="{Binding EditFactionsCommand}" />
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" 
+                Background="#252526" CornerRadius="8" Padding="15" Margin="5"
+                BorderBrush="#333333" BorderThickness="1">
+            <StackPanel Orientation="Vertical" Spacing="10">
+                <TextBlock Text="Ship Details" FontWeight="Bold" FontSize="16" Foreground="#E0E0E0"/>
+                <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
+                    <ComboBox ItemsSource="{Binding Game.Ships}"
+                              PlaceholderText="Select Ship" Width="225" VerticalAlignment="Center"
+                              SelectedItem="{Binding SelectedShip}" />
+                    
+                    <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
+                        <TextBlock Text="Faction:" Foreground="#AAAAAA" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding SelectedShip.ShipFaction}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                    </StackPanel>
+                    
+                    <Separator Width="1" Height="15" Background="#555555" />
+                    
+                    <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
+                        <TextBlock Text="State:" Foreground="#AAAAAA" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding SelectedShip.ShipState}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                    </StackPanel>
+                    
+                    <Separator Width="1" Height="15" Background="#555555" />
+                    
+                    <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
+                        <TextBlock Text="Size X:" Foreground="#AAAAAA" VerticalAlignment="Center" />
+                        <TextBox Width="60" Text="{Binding SelectedShip.ShipSizeX}" VerticalAlignment="Center" />
+                        <TextBlock Text="Y:" Foreground="#AAAAAA" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        <TextBox Width="60" Text="{Binding SelectedShip.ShipSizeY}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="1" Grid.Column="1" 
+                Background="#252526" CornerRadius="8" Padding="15" Margin="5"
+                BorderBrush="#333333" BorderThickness="1">
+            <Grid RowDefinitions="Auto, *">
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10" Margin="0,0,0,15">
+                    <TextBlock Text="Characters" FontWeight="Bold" FontSize="16" Foreground="#E0E0E0" VerticalAlignment="Center"/>
+                    <Button Content="Edit" Width="75" HorizontalContentAlignment="Center"
+                            Command="{Binding EditCharacterCommand}" />
+                    <Button Content="Clone" Width="75" HorizontalContentAlignment="Center"
+                            Command="{Binding CloneCharacterCommand}" />
+                </StackPanel>
+                
+                <ScrollViewer Grid.Row="1">
+                    <ListBox ItemsSource="{Binding CharacterList}"
+                             SelectedIndex="{Binding SelectedCharacterIndex}" 
+                             Background="Transparent" BorderThickness="0" />
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" Grid.Column="2" RowDefinitions="*, *">
+            <Border Grid.Row="0" Background="#252526" CornerRadius="8" Padding="15" Margin="5,5,5,10" 
+                    BorderBrush="#333333" BorderThickness="1">
+                <Grid RowDefinitions="Auto, *">
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10" Margin="0,0,0,15">
+                        <TextBlock Text="Storages" FontWeight="Bold" FontSize="16" Foreground="#E0E0E0" VerticalAlignment="Center"/>
+                        <Button Content="Edit Storage" Width="120" HorizontalContentAlignment="Center"
+                                Command="{Binding OpenStorageCommand}" />
+                    </StackPanel>
+                    
+                    <ScrollViewer Grid.Row="1">
+                        <ListBox ItemsSource="{Binding StorageFacilities}"
+                                 SelectedIndex="{Binding SelectedStorageFacilityIndex}" 
+                                 Background="Transparent" BorderThickness="0" />
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="1" Background="#252526" CornerRadius="8" Padding="15" Margin="5,0,5,5" 
+                    BorderBrush="#333333" BorderThickness="1">
+                <Grid RowDefinitions="Auto, *">
+                    <TextBlock Grid.Row="0" Text="Tool Facilities" FontWeight="Bold" FontSize="16" Foreground="#E0E0E0" Margin="0,0,0,15"/>
+                    <ScrollViewer Grid.Row="1">
+                        <DataGrid AutoGenerateColumns="False" Background="Transparent" BorderThickness="0"
+                                  ItemsSource="{Binding SelectedShip.ToolFacilities}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Tools Amount" Width="*" IsReadOnly="False"
+                                                    Binding="{Binding BuildingToolsAmount}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+
+    </Grid>
+</UserControl>

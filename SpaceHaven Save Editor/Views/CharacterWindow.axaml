@@ -1,0 +1,194 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:SpaceHaven_Save_Editor.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="680" d:DesignHeight="520"
+        Width="680" Height="520"
+        x:Class="SpaceHaven_Save_Editor.Views.CharacterWindow"
+        WindowStartupLocation="CenterOwner"
+        Icon="/Assets/icon.ico"
+        CanResize="False"
+        Title="Character Editor"
+        Background="#1E1E1E">
+
+    <Design.DataContext>
+        <vm:CharacterViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto, *" Margin="12">
+
+        <Border Grid.Row="0" Background="#252526" CornerRadius="8" Padding="12" Margin="0,0,0,8"
+                BorderBrush="#333333" BorderThickness="1">
+            <Grid ColumnDefinitions="*, Auto">
+                <StackPanel Grid.Column="0" Spacing="4">
+                    <TextBlock FontSize="26" FontWeight="Bold"
+                               Text="{Binding Character.CharacterName}" Foreground="#E0E0E0"/>
+                    <StackPanel Orientation="Horizontal" Spacing="16">
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <TextBlock Text="Faction:" Foreground="#888888"/>
+                            <TextBlock Text="{Binding Character.FactionSide}" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <TextBlock Text="Crewman:" Foreground="#888888"/>
+                            <TextBlock Text="{Binding Character.IsCrewman}" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                    <Button Content="Set Crewman" Padding="8,4"
+                            Command="{Binding SetToCrewman}" />
+                    <Button Content="Set Faction" Padding="8,4"
+                            Command="{Binding SetFaction}" />
+                    <Button Content="View XML" Padding="8,4"
+                            Command="{Binding ViewXmlNode}" />
+                    <Button Content="Save &amp; Exit" Padding="8,4"
+                            Command="{Binding SaveAndExit}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <TabControl Grid.Row="1">
+
+            <TabItem Header="Stats">
+                <Grid RowDefinitions="*, Auto">
+                    <DataGrid Grid.Row="0" AutoGenerateColumns="False"
+                              ItemsSource="{Binding Character.CharacterStats}"
+                              Background="Transparent">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Stat" IsReadOnly="True" Width="*" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="Value" Width="100" Binding="{Binding Value}" />
+                            <DataGridTextColumn Header="Max Value" Width="100" Binding="{Binding MaxValue}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button Grid.Row="1" Content="Max All Stats" HorizontalAlignment="Right"
+                            Margin="0,6,0,0" Padding="10,4"
+                            Command="{Binding MaxStats}" />
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Skills">
+                <Grid RowDefinitions="*, Auto">
+                    <DataGrid Grid.Row="0" AutoGenerateColumns="False"
+                              ItemsSource="{Binding Character.CharacterSkills}"
+                              Background="Transparent">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Skill" IsReadOnly="True" Width="*" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="Level (0-8)" Width="100" Binding="{Binding Value}" />
+                            <DataGridTextColumn Header="Max Level" Width="100" Binding="{Binding MaxValue}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button Grid.Row="1" Content="Max All Skills" HorizontalAlignment="Right"
+                            Margin="0,6,0,0" Padding="10,4"
+                            Command="{Binding MaxSkills}" />
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Attributes">
+                <Grid RowDefinitions="*, Auto">
+                    <DataGrid Grid.Row="0" AutoGenerateColumns="False"
+                              ItemsSource="{Binding Character.CharacterAttributes}"
+                              Background="Transparent">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Attribute" IsReadOnly="True" Width="*" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="Points (0-6)" Width="100" Binding="{Binding Value}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button Grid.Row="1" Content="Max All Attributes" HorizontalAlignment="Right"
+                            Margin="0,6,0,0" Padding="10,4"
+                            Command="{Binding MaxAttributes}" />
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Traits">
+                <Grid ColumnDefinitions="*, 220" Margin="4">
+
+                    <Grid Grid.Column="0" RowDefinitions="Auto, *" Margin="0,0,8,0">
+                        <TextBlock Grid.Row="0" Text="Current Traits" FontWeight="SemiBold"
+                                   Foreground="#AAAAAA" Margin="0,0,0,6"/>
+                        <Border Grid.Row="1" BorderBrush="#333333" BorderThickness="1" CornerRadius="4">
+                            <ListBox ItemsSource="{Binding Character.CharacterTraits}"
+                                     SelectedIndex="{Binding SelectedCharacterTrait}"
+                                     Background="Transparent" BorderThickness="0">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}" Padding="4,2"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Border>
+                    </Grid>
+
+                    <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Top" Margin="0,24,0,0">
+                        <TextBlock Text="Add Trait" FontWeight="SemiBold" Foreground="#AAAAAA"/>
+                        <ComboBox ItemsSource="{Binding AllTraits}"
+                                  SelectedItem="{Binding SelectedCharacterTraitFromComboBox}"
+                                  HorizontalAlignment="Stretch"
+                                  PlaceholderText="Select trait..."/>
+                        <Button Content="Add Selected" HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                Command="{Binding AddSelectedTrait}" />
+                        <Button Content="Remove Selected" HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                Command="{Binding RemoveSelectedTrait}" />
+                        <Separator Height="1" Background="#333333" Margin="0,4"/>
+                        <Button Content="Clear All Traits" HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                Command="{Binding ClearAllTraits}" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Conditions">
+                <Grid ColumnDefinitions="*, 220" Margin="4">
+
+                    <Grid Grid.Column="0" RowDefinitions="Auto, *" Margin="0,0,8,0">
+                        <TextBlock Grid.Row="0" Text="Current Conditions" FontWeight="SemiBold"
+                                   Foreground="#AAAAAA" Margin="0,0,0,6"/>
+                        <Border Grid.Row="1" BorderBrush="#333333" BorderThickness="1" CornerRadius="4">
+                            <ListBox ItemsSource="{Binding Character.CharacterConditions}"
+                                     SelectedIndex="{Binding SelectedConditionIndex}"
+                                     Background="Transparent" BorderThickness="0">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <TextBlock Text="{Binding Name}" Padding="4,2"/>
+                                            <TextBlock Text="{Binding Value, StringFormat='Level: {0}'}" 
+                                                       Foreground="#888888" VerticalAlignment="Center" FontSize="12"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Border>
+                    </Grid>
+
+                    <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Top" Margin="0,24,0,0">
+                        <TextBlock Text="Add Condition" FontWeight="SemiBold" Foreground="#AAAAAA"/>
+                        <ComboBox ItemsSource="{Binding AllConditions}"
+                                  SelectedItem="{Binding SelectedConditionFromComboBox}"
+                                  HorizontalAlignment="Stretch"
+                                  PlaceholderText="Select condition..."/>
+                        
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="Level:" FontSize="12" Foreground="#888888"/>
+                            <NumericUpDown Minimum="0" Maximum="5" Value="{Binding SelectedConditionLevel}"/>
+                        </StackPanel>
+
+                        <Button Content="Add Condition" HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                Command="{Binding AddCondition}" />
+                        <Button Content="Remove Selected" HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                Command="{Binding RemoveCondition}" />
+                        <Separator Height="1" Background="#333333" Margin="0,4"/>
+                        <Button Content="Clear All" HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                Command="{Binding ClearAllConditions}" />
+                    </StackPanel>
+
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</Window>
